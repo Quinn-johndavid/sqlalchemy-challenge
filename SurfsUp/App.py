@@ -44,7 +44,7 @@ def home():
 @app.route("/api/v1.0/precipitation")
 def prcp():
     """Converts Query results to a Dictionary using `date` as the key and `prcp` as the value."""
-    lastDate = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
+    
     
     lastYear = dt.date(2017, 8, 23) - dt.timedelta(days=365)
     
@@ -72,7 +72,7 @@ def stations():
 def tobs():
     """Query for the dates and temperature observations from a year from the last data point."""
  
-    lastDate = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
+   
     lastYear = dt.date(2017, 8, 23) - dt.timedelta(days=365)
     
     """* Return a JSON list of Temperature Observations (tobs) for the previous year."""
@@ -88,14 +88,14 @@ def tobs():
 def stats(start=None, end=None):
     """Return TMIN, TAVG, TMAX."""
 
-    # Select statement
+    
     sel = [func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)]
 
     if not end:
         # calculate TMIN, TAVG, TMAX for dates greater than start
         results = session.query(*sel).\
             filter(Measurement.date >= start).all()
-        # Unravel results into a 1D array and convert to a list
+       
         temps = list(np.ravel(results))
         return jsonify(temps)
 
@@ -103,7 +103,7 @@ def stats(start=None, end=None):
     results = session.query(*sel).\
         filter(Measurement.date >= start).\
         filter(Measurement.date <= end).all()
-    # Unravel results into a 1D array and convert to a list
+   
     temps = list(np.ravel(results))
     return jsonify(temps)
 
