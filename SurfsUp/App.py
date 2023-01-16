@@ -50,6 +50,8 @@ def prcp():
     
     precip_data = session.query(Measurement.date,Measurement.prcp).filter(Measurement.date>=lastYear).order_by(Measurement.date).all()
     
+    session.close()
+
     precipDict = []
     for date, prcp in precip_data:
         precipResultsDict = {}
@@ -64,7 +66,7 @@ def stations():
     """Return a JSON list of stations"""
     
     results = session.query(Station.station).all()
-
+    session.close()
     return jsonify(results)
 
 
@@ -77,7 +79,7 @@ def tobs():
     
     """* Return a JSON list of Temperature Observations (tobs) for the previous year."""
     tobsData = session.query(Measurement.date, Measurement.tobs).filter(Measurement.date>=lastYear).order_by(Measurement.date).all()
-    
+    session.close()
 
     return jsonify(tobsData)
 
@@ -105,6 +107,7 @@ def stats(start=None, end=None):
         filter(Measurement.date <= end).all()
    
     temps = list(np.ravel(results))
+    session.close()
     return jsonify(temps)
 
 
